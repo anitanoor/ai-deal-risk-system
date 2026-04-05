@@ -1,0 +1,5 @@
+deal_id,company,amount,stage,last_activity_days,notes
+1,ABC Corp,50000,proposal,2,Client is responsive and interested
+2,XYZ Ltd,120000,negotiation,14,Client delayed response multiple times
+3,Startup A,15000,discovery,30,No reply after demo
+4,BigTech,300000,proposal,1,Strong interest, wants discount
