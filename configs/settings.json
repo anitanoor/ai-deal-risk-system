@@ -1,0 +1,5 @@
+{
+  "risk_threshold": 0.7,
+  "inactive_days_limit": 14,
+  "alert_enabled": true
+}

@@ -1,155 +1,131 @@
-# 💰 AI Deal Risk Intelligence System
+# AI Deal Risk System
 
-An AI-powered system that evaluates and scores deal risk using behavioral signals, business logic, and data-driven insights.
+A lightweight AI-assisted deal risk scoring system that helps sales teams detect risky deals early, reduce lost revenue, and automate follow-up actions.
 
----
+## 🔥 Problem
 
-## 🚀 Overview
+Sales teams lose revenue when deals slip through the cracks. Poor activity tracking, stale pipeline stages, and missing risk signals make it hard to identify bad deals before they turn into losses.
 
-This project simulates a real-world **AI-driven sales intelligence system** used by revenue and operations teams to identify risky deals early and take proactive action.
+## 💡 Solution
 
-It combines backend APIs, data processing, and an interactive dashboard to deliver actionable insights.
+This system applies AI risk scoring and automation to every deal:
 
----
+- `GET /evaluate/{deal_id}` scores real deals from a dataset
+- `POST /analyze-deal` accepts new deal data and returns a risk score
+- AI explanation and routing are simulated through scoring logic and logging
 
-## 🧠 Key Capabilities
-
-* 📊 Analyze deal data (amount, stage, inactivity)
-* ⚠️ Generate risk scores (LOW / MEDIUM / HIGH)
-* 🧾 Provide reasoning behind each risk score
-* 📈 Visualize insights through an interactive dashboard
-* 🛡 Handle messy or inconsistent real-world data
-
----
-
-## 🛠 Tech Stack
-
-* **Python** — core programming language
-* **FastAPI** — backend API for risk scoring
-* **Streamlit** — interactive dashboard UI
-* **Pandas** — data processing and analysis
-
----
-
-## 📊 Features
-
-* Real-time deal risk evaluation
-* Rule-based + AI-inspired scoring logic
-* Clean and interactive dashboard
-* Data visualization (deal stages, inactivity trends)
-* Error handling for malformed CSV data
-
----
-
-## 🗂 Project Structure
+## 🧠 Architecture
 
 ```
-ai-deal-risk-system/
-│
-├── app.py              # FastAPI backend
-├── dashboard.py       # Streamlit dashboard
-├── data/
-│   └── deals.csv      # Sample dataset
-├── requirements.txt
-└── README.md
+Client
+  ├─> /health
+  ├─> /metrics
+  ├─> /deals
+  ├─> /evaluate/{deal_id}
+  └─> /analyze-deal
+
+FastAPI app
+  ├── app/main.py
+  ├── app/api/routes.py
+  ├── app/services/evaluation.py
+  ├── app/models/deal.py
+  ├── app/core/config.py
+  └── app/utils/data_loader.py
+
+Data + config
+  ├── data/deals.csv
+  └── configs/settings.json
 ```
 
----
+> The API routes request traffic through FastAPI, risk logic in `app/services`, and sample config via JSON settings.
 
-## ⚙️ How to Run Locally
+## ⚙️ API Usage
 
-### 1. Clone the repository
+### Health check
 
 ```bash
-git clone https://github.com/anitanoor/ai-deal-risk-system.git
-cd ai-deal-risk-system
+curl http://localhost:8000/health
 ```
 
----
-
-### 2. Create virtual environment
+### Metrics
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate
+curl http://localhost:8000/metrics
 ```
 
----
-
-### 3. Install dependencies
+### List deals
 
 ```bash
-pip install -r requirements.txt
+curl http://localhost:8000/deals
 ```
 
----
-
-### 4. Run backend API
+### Evaluate a deal
 
 ```bash
-python3 -m uvicorn app:app --reload
+curl http://localhost:8000/evaluate/1
 ```
 
-API will be available at:
-👉 http://127.0.0.1:8000
-
----
-
-### 5. Run dashboard
+### Analyze a new deal
 
 ```bash
-streamlit run dashboard.py
+curl -X POST http://localhost:8000/analyze-deal \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Deal A", "value": 12000, "last_activity_days": 20}'
 ```
 
-Dashboard will open automatically in your browser.
+## 📊 Sample output
 
----
-
-## 📌 Example API Response
+### `/metrics`
 
 ```json
 {
-  "risk_score": 0.7,
-  "risk_level": "HIGH",
-  "reason": "Client inactive for extended period"
+  "accuracy": 0.85,
+  "precision": 0.8,
+  "request_id": "..."
 }
 ```
 
----
+### `/analyze-deal`
 
-## 💡 Use Cases
+```json
+{
+  "risk_score": 0.4,
+  "request_id": "..."
+}
+```
 
-* Sales teams identifying at-risk deals
-* Revenue operations prioritizing pipeline
-* AI experimentation for decision systems
-* Portfolio project demonstrating full-stack + AI thinking
+### `/health`
 
----
+```json
+{
+  "status": "ok",
+  "service": "AI Deal Risk System",
+  "request_id": "..."
+}
+```
 
-## 🔥 What This Project Demonstrates
+## 🚀 How to run (Docker)
 
-* End-to-end system design (data → API → UI)
-* Real-world debugging and data handling
-* Applied AI logic (risk scoring + reasoning)
-* Ability to ship functional, production-style projects
+Build the Docker image:
 
----
+```bash
+docker build -t ai-deal-risk-system .
+```
 
-## 👤 Author
+Run the container:
 
-**Anita Noor**
+```bash
+docker run -p 8000:8000 ai-deal-risk-system
+```
 
----
+Open the API in your browser or use curl at:
 
-## 🚀 Next Steps
+```bash
+http://localhost:8000
+```
 
-* Deploy backend (Render / Railway)
-* Deploy dashboard (Streamlit Cloud)
-* Integrate real CRM data
-* Add ML-based risk prediction
+## 🧪 Testing
 
----
-
-## ⭐ If you found this useful
-
-Give it a star on GitHub — it helps visibility!
+```bash
+pytest
+```
